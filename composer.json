@@ -1,0 +1,58 @@
+{
+  "name": "excent/Alexander",
+  "description": "A wrapper of https://github.com/begateway/begateway-api-php for Laravel",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "bepaid",
+    "laravel",
+    "payment"
+  ],
+  "config": {
+    "discard-changes": true
+  },
+  "require": {
+    "php": "^8.0",
+    "laravel/framework": "^8|^9",
+    "begateway/begateway-api-php": "^4.5.*",
+    "myclabs/php-enum": "1.8.*"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^5|^6|^7",
+    "ext-json": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Excent\\BePaidLaravel\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Excent\\BePaidLaravel\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Excent\\BePaidLaravel\\Providers\\BePaidServiceProvider"
+      ],
+      "aliases": {
+        "Authorization": "Excent\\BePaidLaravel\\Facades\\Authorization",
+        "CardToken": "Excent\\BePaidLaravel\\Facades\\CardToken",
+        "Payment": "Excent\\BePaidLaravel\\Facades\\Payment",
+        "PaymentToken": "Excent\\BePaidLaravel\\Facades\\PaymentToken",
+        "Product": "Excent\\BePaidLaravel\\Facades\\Product",
+        "Query": "Excent\\BePaidLaravel\\Facades\\Query",
+        "Refund": "Excent\\BePaidLaravel\\Facades\\Refund"
+      }
+    },
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
+    }
+  },
+  "scripts": {
+    "test": "./vendor/bin/phpunit --colors=always",
+    "test:ci": "composer test -- --verbose --coverage-text --coverage-clover=coverage.xml"
+  },
+  "minimum-stability": "dev"
+}

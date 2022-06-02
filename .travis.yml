@@ -1,0 +1,49 @@
+language: php
+
+git:
+  depth: 1
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+env:
+  global:
+    - secure: "tmMSa0chDCTTUkEQpC6VsDrOBC1qArREvVQiuifJb0j6ju3nUYUvWPgcbBOAkSXqPiBTmlz+QRzRLaPeMw+8e6cU89n7fRwWq9PZ8rly6hP47V/XktHTQ/m2PPgWsF5BYdG/mgVYgofsQhc5CXYIsnv0yaWp173r/RFulIs5fZWew4jUqk4tToCyBsOqd7XeA5FN4CxZGr8MflHWlSRTvUz9U7SbgTpJOZGsVuhYY1U59+Lgn9Ifnx+EPzX6JeEZOPI2HPsfRTXdyA12t6/ctRpuka+0nr9gSUMEbaG5VCdd5Onz0F9vgQthwOHcD3+WIMFOr9UQ++hS2IGIs4uBB8Es3v29LYbGPrLS9PrOTarp1RUiWDlcmDW69cSsMFTcu+fKQRwYoRn35f0ufYvOcjUGDx8S+HxjAxp86sqeaCjYJY5E6Xnnz73iKcPT/Tm0ws9HRZ6c6LU2xDMSSUj1cHVG9+QbW3LH9+K7IPuNOktGzWrBL9Rq+3xpVTpD4HZNgwPG5jG1DDy+UkWeA50E37bQLhTWfKghC5B6YbO19oQKlKMNop4Ykx8Eu4Nl5TQVI1jGjFjeOKj/dP+s/dzohPekeyyT9zmYRQE9mj6NMoGqc+O5QhmGtgrm+rsGuASY/zFkc+ylle/cBs5XSEBPs88fxBR1YzciJnuSnO13nYs="
+
+matrix:
+  include:
+    - php: 7.3
+      env: LARAVEL='5.7.*' TESTBENCH='3.7.*'
+    - php: 7.3
+      env: LARAVEL='5.8.*' TESTBENCH='3.8.*'
+    - php: 7.3
+      env: LARAVEL='6.*' TESTBENCH='4.*'
+    - php: 7.3
+      env: LARAVEL='7.*' TESTBENCH='5.*'
+    - php: 7.4
+      env: LARAVEL='5.7.*' TESTBENCH='3.7.*'
+    - php: 7.4
+      env: LARAVEL='5.8.*' TESTBENCH='3.8.*'
+    - php: 7.4
+      env: LARAVEL='6.*' TESTBENCH='4.*'
+    - php: 7.4
+      env: LARAVEL='7.*' TESTBENCH='5.*'
+    - php: 7.4
+      env: LARAVEL='8.*' TESTBENCH='6.*'
+  fast_finish: true
+
+before_install:
+  - cp phpunit.xml.dist phpunit.xml
+  - travis_retry composer self-update
+  - travis_retry composer require "laravel/framework:${LARAVEL}" --no-interaction --no-update
+  - travis_retry composer require --dev "orchestra/testbench:${TESTBENCH}" --no-interaction --no-update
+
+install:
+  - COMPOSER_MEMORY_LIMIT=-1 travis_retry composer install --prefer-dist --no-interaction --no-suggest
+
+script:
+  - composer test:ci
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
