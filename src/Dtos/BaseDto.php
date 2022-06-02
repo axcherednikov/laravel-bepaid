@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Excent\BePaidLaravel\Dtos;
 
 use Illuminate\Support\Str;
@@ -9,7 +11,7 @@ abstract class BaseDto
     /**
      * BaseDto constructor.
      *
-     * @param array $attributes
+     * @param  array|null  $attributes
      */
     public function __construct(?array $attributes = null)
     {
@@ -38,7 +40,7 @@ abstract class BaseDto
             }
         }
 
-        if (!$object instanceof static) {
+        if (! $object instanceof static) {
             return $object;
         }
     }

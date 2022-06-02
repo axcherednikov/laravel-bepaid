@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Excent\BePaidLaravel\Dtos;
 
-use Excent\BePaidLaravel\Enums\TransactionTypesEnum;
 use Excent\BePaidLaravel\Types\AdditionalDataType;
 use Excent\BePaidLaravel\Types\MoneyType;
 
@@ -18,11 +19,11 @@ class ProductDto extends BaseDto
 
     public int $quantity;
 
-    public bool $infinite;
+    public bool $infinite_state;
 
-    public bool $immortal;
+    public bool $immortal_state;
 
-    public TransactionTypesEnum $transaction_type;
+    public string $transaction_type;
 
     public array $visible;
 

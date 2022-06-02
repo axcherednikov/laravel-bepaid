@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace Excent\BePaidLaravel\Tests\Unit;
 
 use BeGateway\GatewayTransport;
+use Excent\BePaidLaravel\Authorization;
 use Excent\BePaidLaravel\Dtos\AuthorizationDto;
 use Excent\BePaidLaravel\Tests\TestCase;
 
 class AuthorizationTest extends TestCase
 {
-    /** @var \Excent\BePaidLaravel\Authorization */
-    private $authorization;
-    private $data = [
+    private Authorization $authorization;
+
+    private array $data = [
         'money' => [
             'amount' => 333.33,
         ],

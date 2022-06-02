@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Excent\BePaidLaravel\Tests\Unit;
 
 use BeGateway\GatewayTransport;
@@ -55,7 +57,7 @@ class PaymentTokenTest extends TestCase
             'description' => 'Dummy text',
             'tracking_id' => 'test_tracking_id_1234',
             'transaction_type' => 'payment',
-            'expired_at' => date('c', strtotime('+2 days')),
+            'expired_at' => date('c', strtotime('+1 days')),
             'attempts' => 4,
         ];
     }
@@ -70,15 +72,20 @@ class PaymentTokenTest extends TestCase
         $this->assertEquals($config['test_mode'], $this->paymentToken->operation->getTestMode());
         $this->assertEquals($config['currency'], $this->paymentToken->operation->money->getCurrency());
         $this->assertEquals($config['lang'], $this->paymentToken->operation->getLanguage());
-        $this->assertEquals($router->route($config['urls']['notifications']['name'], [], true), $this->paymentToken->operation->getNotificationUrl());
-        $this->assertEquals($router->route($config['urls']['success']['name'], [], true), $this->paymentToken->operation->getSuccessUrl());
-        $this->assertEquals($router->route($config['urls']['fail']['name'], [], true), $this->paymentToken->operation->getFailUrl());
-        $this->assertEquals($router->route($config['urls']['decline']['name'], [], true), $this->paymentToken->operation->getDeclineUrl());
-        $this->assertEquals($router->route($config['urls']['cancel']['name'], [], true), $this->paymentToken->operation->getCancelUrl());
-        $this->assertNotNull($this->paymentToken->operation->getExpiredAt());
+        $this->assertEquals($router->route($config['urls']['notifications']['name'], [], true),
+            $this->paymentToken->operation->getNotificationUrl());
+        $this->assertEquals($router->route($config['urls']['success']['name'], [], true),
+            $this->paymentToken->operation->getSuccessUrl());
+        $this->assertEquals($router->route($config['urls']['fail']['name'], [], true),
+            $this->paymentToken->operation->getFailUrl());
+        $this->assertEquals($router->route($config['urls']['decline']['name'], [], true),
+            $this->paymentToken->operation->getDeclineUrl());
+        $this->assertEquals($router->route($config['urls']['cancel']['name'], [], true),
+            $this->paymentToken->operation->getCancelUrl());
+        $this->assertNotNull($this->paymentToken->operation->getExpiryDate());
         $this->assertEquals($config['attempts'], $this->paymentToken->operation->getAttempts());
-        $this->assertEquals($config['visible'], $this->paymentToken->operation->getVisible());
-        $this->assertEquals($config['read_only'], $this->paymentToken->operation->getReadonly());
+        $this->assertEquals($config['visible'], $this->paymentToken->operation->getVisibleFields());
+        $this->assertEquals($config['read_only'], $this->paymentToken->operation->getReadonlyFields());
     }
 
     public function testFill()
@@ -92,14 +99,15 @@ class PaymentTokenTest extends TestCase
         $this->assertEquals($this->data['tracking_id'], $result->operation->getTrackingId());
         $this->assertEquals($this->data['transaction_type'], $result->operation->getTransactionType());
         $this->assertEquals($this->data['money']['amount'], $result->operation->money->getAmount());
-        $this->assertEquals($this->data['additional_data']['receipt'], $result->operation->additional_data->getReceipt());
-        $this->assertEquals($this->data['expired_at'], $result->operation->getExpiryAt());
+        $this->assertEquals($this->data['additional_data']['receipt'],
+            $result->operation->additional_data->getReceipt());
+        $this->assertEquals($this->data['expired_at'], $result->operation->getExpiryDate());
         $this->assertEquals($this->data['attempts'], $result->operation->getAttempts());
-        $visible = $result->operation->getVisible();
+        $visible = $result->operation->getVisibleFields();
         $this->assertEquals(sort($this->data['visible']), sort($visible));
-        $readonly = $result->operation->getReadonly();
+        $readonly = $result->operation->getReadonlyFields();
         $this->assertEquals(sort($this->data['readonly']), sort($readonly));
-        $this->assertSameSize($this->data['customer'], (array)$result->operation->customer);
+        $this->assertSameSize($this->data['customer'], (array) $result->operation->customer);
 
         foreach ($result->operation->customer as $key => $value) {
             $this->assertEquals($this->data['customer'][$key], $value);

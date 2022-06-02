@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Excent\BePaidLaravel\Providers;
 
-use BeGateway\{AuthorizationOperation,
+use BeGateway\{
+    AuthorizationOperation,
     CaptureOperation,
     CardToken as BePaidCardToken,
     CreditOperation,
@@ -15,10 +18,12 @@ use BeGateway\{AuthorizationOperation,
     RefundOperation,
     Settings,
     VoidOperation,
-    Webhook};
+    Webhook
+};
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
-use Excent\BePaidLaravel\{Authorization,
+use Excent\BePaidLaravel\{
+    Authorization,
     CardToken,
     ChildTransaction,
     Credit,
@@ -29,7 +34,8 @@ use Excent\BePaidLaravel\{Authorization,
     PaymentToken,
     Product,
     Query,
-    Refund};
+    Refund
+};
 
 class BePaidServiceProvider extends ServiceProvider
 {
@@ -87,6 +93,8 @@ class BePaidServiceProvider extends ServiceProvider
             $operation->setCancelUrl(route($config['urls']['cancel']['name'], [], true));
             $operation->setAttempts($config['attempts']);
             $operation->setExpiryDate(now()->addMinutes($config['expired_at'])->toIso8601String());
+            $operation->setVisible($config['visible']);
+            $operation->setReadonly($config['read_only']);
 
             return new PaymentToken($operation);
         });
@@ -101,7 +109,9 @@ class BePaidServiceProvider extends ServiceProvider
         $formattedCurrency = strtoupper($config['currency']);
         $fallbackFormattedCurrency = strtoupper($config['fallback_currency']);
 
-        return CurrencyEnum::isValid($formattedCurrency) ? new CurrencyEnum($formattedCurrency) : new CurrencyEnum($fallbackFormattedCurrency);
+        return CurrencyEnum::isValid($formattedCurrency)
+            ? (new CurrencyEnum($formattedCurrency))->getValue()
+            : (new CurrencyEnum($fallbackFormattedCurrency))->getValue();
     }
 
     private function getLanguage(?array $conf = null): string
@@ -111,7 +121,9 @@ class BePaidServiceProvider extends ServiceProvider
         $formattedLanguage = strtolower($config['lang']);
         $fallbackFormattedLanguage = strtolower($config['fallback_lang']);
 
-        return LanguageEnum::isValid($formattedLanguage) ? new LanguageEnum($formattedLanguage) : new LanguageEnum($fallbackFormattedLanguage);
+        return LanguageEnum::isValid($formattedLanguage)
+            ? (new LanguageEnum($formattedLanguage))->getValue()
+            : (new LanguageEnum($fallbackFormattedLanguage))->getValue();
     }
 
     private function bindPayment(): void
@@ -179,7 +191,7 @@ class BePaidServiceProvider extends ServiceProvider
             $operation->setSuccessUrl(route($config['urls']['success']['name'], [], true));
             $operation->setFailUrl(route($config['urls']['fail']['name'], [], true));
             $operation->setReturnUrl(route($config['urls']['return']['name'], [], true));
-            $operation->setExpiredAt(now()->addMinutes($config['expired_at'])->toIso8601String());
+            $operation->setExpiryDate(now()->addMinutes($config['expired_at'])->toIso8601String());
 
             $operation->setVisible($config['visible']);
 
