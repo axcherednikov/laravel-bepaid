@@ -1,5 +1,5 @@
 {
-  "name": "axcherednikov/bepaid-laravel",
+  "name": "axcherednikov/laravel-bepaid",
   "description": "A wrapper of https://github.com/begateway/begateway-api-php for Laravel",
   "type": "library",
   "license": "MIT",
