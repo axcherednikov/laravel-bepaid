@@ -1,5 +1,5 @@
 {
-  "name": "excent/Alexander",
+  "name": "axcherednikov/bepaid-laravel",
   "description": "A wrapper of https://github.com/begateway/begateway-api-php for Laravel",
   "type": "library",
   "license": "MIT",
@@ -45,9 +45,6 @@
         "Query": "Excent\\BePaidLaravel\\Facades\\Query",
         "Refund": "Excent\\BePaidLaravel\\Facades\\Refund"
       }
-    },
-    "branch-alias": {
-      "dev-master": "1.0.x-dev"
     }
   },
   "scripts": {
