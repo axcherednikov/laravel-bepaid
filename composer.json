@@ -14,7 +14,7 @@
   "require": {
     "php": "^8.0",
     "laravel/framework": "^8|^9",
-    "begateway/begateway-api-php": "^4.5.*",
+    "begateway/begateway-api-php": "^4.5",
     "myclabs/php-enum": "1.8.*"
   },
   "require-dev": {
