@@ -12,12 +12,10 @@ A wrapper of [BeGateway](https://github.com/begateway/begateway-api-php) for Lar
 
 ## Installation
 
-- Run
-`composer update`
+- Run `composer require axcherednikov/laravel-bepaid`
 
-- Publish config
 
-`php artisan vendor:publish --provider="Excent\BePaidLaravel\Providers\BePaidServiceProvider"`
+- Publish config `php artisan vendor:publish --provider="Excent\BePaidLaravel\Providers\BePaidServiceProvider"`
 
 ## Usage
 
