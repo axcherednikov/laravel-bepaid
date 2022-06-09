@@ -21,10 +21,8 @@ abstract class GatewayAbstract implements IGateway
 
         $responseBase = $this->operation->submit();
 
-        $response = $responseBase->getResponse();
-
         if ($responseBase->isError()) {
-            $response = $response->reaponse;
+            $response = $responseBase->getResponse()->response;
 
             if (strpos($response->message, 'transaction can\'t be refunded')) {
                 throw new TransactionException($response->message, $response->errors);
