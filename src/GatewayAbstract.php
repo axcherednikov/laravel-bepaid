@@ -21,9 +21,15 @@ abstract class GatewayAbstract implements IGateway
         $responseBase = $this->operation->submit();
 
         if ($responseBase->isError()) {
+            if (! is_object($responseBase->getResponse())) {
+                throw new \Exception('Bad response, is not object!');
+            }
+
             $response = $responseBase->getResponse()->response;
 
-            throw new BadRequestException($response->message, $response->errors);
+            $errors = isset($response->errors) ? (array) $response->errors : [];
+
+            throw new BadRequestException($response->message, $errors);
         }
 
         return $responseBase;
