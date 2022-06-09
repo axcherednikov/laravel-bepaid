@@ -2,7 +2,9 @@
 
 namespace Excent\BePaidLaravel\Types;
 
-class CustomerType
+use Excent\BePaidLaravel\Contracts\FillingDTOContract;
+
+class CustomerType implements FillingDTOContract
 {
     public $ip;
     public $email;

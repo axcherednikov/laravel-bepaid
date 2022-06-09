@@ -2,7 +2,9 @@
 
 namespace Excent\BePaidLaravel\Types;
 
-class CardType
+use Excent\BePaidLaravel\Contracts\FillingDTOContract;
+
+class CardType implements FillingDTOContract
 {
     public $card_number;
     public $card_holder;

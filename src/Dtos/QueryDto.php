@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Excent\BePaidLaravel\Dtos;
 
-class QueryDto
+use Excent\BePaidLaravel\Contracts\FillingDTOContract;
+
+class QueryDto implements FillingDTOContract
 {
     public string $token;
 }

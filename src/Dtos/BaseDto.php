@@ -8,11 +8,6 @@ use Illuminate\Support\Str;
 
 abstract class BaseDto
 {
-    /**
-     * BaseDto constructor.
-     *
-     * @param  array|null  $attributes
-     */
     public function __construct(?array $attributes = null)
     {
         if ($attributes && count($attributes)) {

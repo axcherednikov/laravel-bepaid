@@ -1,30 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Excent\BePaidLaravel\Contracts;
 
-use BeGateway\{AuthorizationOperation, CardToken, GetPaymentToken, PaymentOperation, ResponseBase};
-use Excent\BePaidLaravel\Dtos\{AuthorizationDto,
-    CardTokenDto,
-    CreditDto,
-    PaymentDto,
-    PaymentTokenDto,
-    ProductDto,
-    RefundDto};
+use BeGateway\ResponseBase;
 
 interface IGateway
 {
-    /**
-     * @param AuthorizationDto|CardTokenDto|PaymentDto|PaymentTokenDto|ProductDto|RefundDto|CreditDto $data
-     *
-     * @return \BeGateway\ResponseBase
-     */
-    public function submit($data = null): ResponseBase;
+    public function submit(FillingDTOContract $data = null): ResponseBase;
 
-    /**
-     * @param AuthorizationDto|CardTokenDto|PaymentDto|PaymentTokenDto|ProductDto|RefundDto    $data
-     * @param null|AuthorizationOperation|CardToken|GetPaymentToken|PaymentOperation|RefundDto $object
-     *
-     * @return IGateway
-     */
-    public function fill($data, $object = null): self;
+    public function fill(FillingDTOContract $data, $object = null): self;
 }

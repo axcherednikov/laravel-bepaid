@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Excent\BePaidLaravel\Dtos;
 
-class PaymentDto extends AuthorizationDto
+use Excent\BePaidLaravel\Contracts\FillingDTOContract;
+
+class PaymentDto extends AuthorizationDto implements FillingDTOContract
 {
 }

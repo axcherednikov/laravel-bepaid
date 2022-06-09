@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Excent\BePaidLaravel;
 
 use BeGateway\{QueryByPaymentToken, QueryByTrackingId, QueryByUid};
@@ -10,29 +12,13 @@ class Query extends GatewayAbstract
 {
     public QueryByPaymentToken|QueryByTrackingId|QueryByUid $operation;
 
-    private QueryByPaymentToken $queryByPaymentToken;
-
-    private QueryByTrackingId $queryByTrackingId;
-
-    private QueryByUid $queryByUuid;
-
     public function __construct(
-        QueryByPaymentToken $queryByPaymentToken,
-        QueryByTrackingId $queryByTrackingId,
-        QueryByUid $queryByUid
-    )
-    {
-        $this->queryByPaymentToken = $queryByPaymentToken;
-        $this->queryByTrackingId = $queryByTrackingId;
-        $this->queryByUuid = $queryByUid;
+        private QueryByPaymentToken $queryByPaymentToken,
+        private QueryByTrackingId $queryByTrackingId,
+        private QueryByUid $queryByUid
+    ) {
     }
 
-    /**
-     * @param QueryByPaymentTokenDto|QueryByTrackingIdDto|QueryByUidDto|array    $data
-     * @param null|\BeGateway\Money|\BeGateway\AdditionalData|\BeGateway\Product $object
-     *
-     * @return \Excent\BePaidLaravel\Contracts\IGateway
-     */
     public function fill($data, $object = null): IGateway
     {
         if (is_array($data)) {
@@ -41,7 +27,7 @@ class Query extends GatewayAbstract
             } elseif (array_key_exists('tracking_id', $data)) {
                 $this->operation = $this->queryByTrackingId;
             } elseif (array_key_exists('uid', $data)) {
-                $this->operation = $this->queryByUuid;
+                $this->operation = $this->queryByUid;
             }
         } else {
             switch (get_class($data)) {
@@ -52,7 +38,7 @@ class Query extends GatewayAbstract
                     $this->operation = $this->queryByTrackingId;
                     break;
                 case QueryByUidDto::class:
-                    $this->operation = $this->queryByUuid;
+                    $this->operation = $this->queryByUid;
                     break;
             }
         }

@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Excent\BePaidLaravel;
 
-use BeGateway\{Response, ResponseBase};
 use BeGateway\CaptureOperation;
 use BeGateway\VoidOperation;
+use Excent\BePaidLaravel\Contracts\FillingDTOContract;
 use Excent\BePaidLaravel\Contracts\IGateway;
 use Excent\BePaidLaravel\Dtos\{CaptureDto, VoidDto};
 
@@ -12,42 +14,18 @@ class ChildTransaction extends GatewayAbstract
 {
     public VoidOperation|CaptureOperation $operation;
 
-    private VoidOperation $void;
-
-    private CaptureOperation $capture;
-
-    public function __construct(CaptureOperation $capture, VoidOperation $void)
-    {
-        $this->capture = $capture;
-        $this->void = $void;
+    public function __construct(
+        private CaptureOperation $capture,
+        private VoidOperation $void
+    ) {
     }
 
-    /**
-     * @param VoidDto|CaptureDto $data
-     *
-     * @return Response
-     * @throws \Exception
-     */
-    public function submit($data = null): ResponseBase
+    public function fill(FillingDTOContract $data, $object = null): IGateway
     {
-        return parent::submit($data);
-    }
-
-    /**
-     * @param VoidDto|CaptureDto                                   $data
-     * @param null|\BeGateway\Money|VoidOperation|CaptureOperation $object
-     *
-     * @return \Excent\BePaidLaravel\Contracts\IGateway
-     */
-    public function fill($data, $object = null): IGateway
-    {
-        switch (get_class($data)) {
-            case VoidDto::class:
-                $this->operation = $this->void;
-                break;
-            case CaptureDto::class:
-                $this->operation = $this->capture;
-                break;
+        if (get_class($data) === VoidDto::class) {
+            $this->operation = $this->void;
+        } elseif (get_class($data) === CaptureDto::class) {
+            $this->operation = $this->capture;
         }
 
         return parent::fill($data, $object);
