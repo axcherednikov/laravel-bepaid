@@ -9,7 +9,6 @@ use Excent\BePaidLaravel\Contracts\FillingDTOContract;
 use Illuminate\Support\Str;
 use Excent\BePaidLaravel\Contracts\IGateway;
 use Excent\BePaidLaravel\Exceptions\BadRequestException;
-use Excent\BePaidLaravel\Exceptions\TransactionException;
 
 abstract class GatewayAbstract implements IGateway
 {
@@ -24,18 +23,7 @@ abstract class GatewayAbstract implements IGateway
         if ($responseBase->isError()) {
             $response = $responseBase->getResponse()->response;
 
-            if (strpos($response->message, 'transaction can\'t be refunded')) {
-                throw new TransactionException($response->message, $response->errors);
-            } elseif (
-                strpos($response->message, 'can\'t be blank') ||
-                strpos($response->message, 'is invalid') ||
-                strpos($response->message, 'is not a number') ||
-                strpos($response->message, 'must be greater than 0')
-            ) {
-                throw new BadRequestException($response->message, $response->errors);
-            } else {
-                throw new \Exception($response->message);
-            }
+            throw new BadRequestException($response->message, $response->errors);
         }
 
         return $responseBase;

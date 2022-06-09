@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Excent\BePaidLaravel\Exceptions;
 
 use Throwable;
 
 class BadRequestException extends \InvalidArgumentException
 {
-    private $errors;
+    private array $errors;
 
-    public function __construct($message = "", $errors = [], $code = 0, Throwable $previous = null)
+    public function __construct(string $message = "", array $errors = [], int $code = 0, Throwable $previous = null)
     {
         $this->errors = $errors;
 
@@ -20,7 +22,7 @@ class BadRequestException extends \InvalidArgumentException
         return $this->errors;
     }
 
-    public function setErrors(array $errors)
+    public function setErrors(array $errors): void
     {
         $this->errors = $errors;
     }
