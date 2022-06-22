@@ -6,7 +6,7 @@ namespace Excent\BePaidLaravel\Dtos;
 
 use Excent\BePaidLaravel\Contracts\FillingDTOContract;
 
-class QueryByPaymentTokenDto extends BaseDto implements FillingDTOContract
+class StatusQueryDto implements FillingDTOContract
 {
     public string $token;
 }

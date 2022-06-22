@@ -33,7 +33,7 @@ use Excent\BePaidLaravel\{
     Payment,
     PaymentToken,
     Product,
-    Query,
+    StatusQuery,
     Refund
 };
 
@@ -203,15 +203,15 @@ class BePaidServiceProvider extends ServiceProvider
 
     private function bindQuery(): void
     {
-        $this->app->bind(Query::class, function () {
+        $this->app->bind(StatusQuery::class, function () {
             $queryByPaymentToken = new QueryByPaymentToken();
             $queryByTrackingId = new QueryByTrackingId();
             $queryByUuid = new QueryByUid();
 
-            return new Query($queryByPaymentToken, $queryByTrackingId, $queryByUuid);
+            return new StatusQuery($queryByPaymentToken, $queryByTrackingId, $queryByUuid);
         });
 
-        $this->app->alias(Query::class, 'bepaid.query');
+        $this->app->alias(StatusQuery::class, 'bepaid.query');
     }
 
     private function bindRefund(): void

@@ -3,12 +3,12 @@
 namespace Excent\BePaidLaravel\Tests\Unit;
 
 use BeGateway\{GatewayTransport, QueryByPaymentToken, QueryByTrackingId, QueryByUid, Response, ResponseCheckout};
-use Excent\BePaidLaravel\Dtos\{QueryByPaymentTokenDto, QueryByTrackingIdDto, QueryByUidDto};
+use Excent\BePaidLaravel\Dtos\{StatusQueryByPaymentTokenDto, StatusQueryByTrackingIdDto, StatusQueryByUidDto};
 use Excent\BePaidLaravel\Tests\TestCase;
 
-class QueryTest extends TestCase
+class StatusQueryTest extends TestCase
 {
-    /** @var \Excent\BePaidLaravel\Query */
+    /** @var \Excent\BePaidLaravel\StatusQuery */
     private $query;
     /** @var \Excent\BePaidLaravel\Payment */
     private $payment;
@@ -19,7 +19,7 @@ class QueryTest extends TestCase
     {
         $token = 'test_token_12345';
 
-        $dto = new QueryByPaymentTokenDto(compact('token'));
+        $dto = new StatusQueryByPaymentTokenDto(compact('token'));
 
         $result = $this->query->fill($dto);
 
@@ -33,7 +33,7 @@ class QueryTest extends TestCase
     {
         $tracking_id = 'test_tracking_id_12345';
 
-        $dto = new QueryByTrackingIdDto(compact('tracking_id'));
+        $dto = new StatusQueryByTrackingIdDto(compact('tracking_id'));
 
         $result = $this->query->fill($dto);
 
@@ -47,7 +47,7 @@ class QueryTest extends TestCase
     {
         $uid = 'test_uid_12345';
 
-        $dto = new QueryByUidDto(compact('uid'));
+        $dto = new StatusQueryByUidDto(compact('uid'));
 
         $result = $this->query->fill($dto);
 
@@ -159,7 +159,7 @@ class QueryTest extends TestCase
         $paymentResponse = $this->payment->submit();
         $transaction = $paymentResponse->getResponse()->transaction;
 
-        $dto = new QueryByUidDto((array)$transaction);
+        $dto = new StatusQueryByUidDto((array)$transaction);
 
         $response = $this->query->submit($dto);
         $trx = $response->getResponse()->transaction;
@@ -270,7 +270,7 @@ class QueryTest extends TestCase
         $paymentResponse = $this->payment->submit();
         $transaction = $paymentResponse->getResponse()->transaction;
 
-        $dto = new QueryByTrackingIdDto((array)$transaction);
+        $dto = new StatusQueryByTrackingIdDto((array)$transaction);
 
         $response = $this->query->submit($dto);
         $trx = $response->getResponse()->transaction;
@@ -293,7 +293,7 @@ class QueryTest extends TestCase
         $paymentResponse = $this->paymentToken->submit();
         $checkout = $paymentResponse->getResponse()->checkout;
 
-        $dto = new QueryByPaymentTokenDto((array)$checkout);
+        $dto = new StatusQueryByPaymentTokenDto((array)$checkout);
 
         $result = $this->query->submit($dto);
         $queryCheckout = $result->getResponse()->checkout;

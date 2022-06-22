@@ -2,20 +2,19 @@
 
 A wrapper of [BeGateway](https://github.com/begateway/begateway-api-php) for Laravel (unofficial)
 
-## Documentation
-
-### Requirements
-
-**PHP** >= 8.0
-
-**Laravel** >= 8.0
+# Documentation
 
 ## Installation
 
-- Run `composer require axcherednikov/laravel-bepaid`
+- Run:
+```bash
+$ composer require axcherednikov/laravel-bepaid
+```
 
-
-- Publish config `php artisan vendor:publish --provider="Excent\BePaidLaravel\Providers\BePaidServiceProvider"`
+- Publish config
+```bash
+$ php artisan vendor:publish --provider="Excent\BePaidLaravel\Providers\BePaidServiceProvider"
+```
 
 ## Usage
 
@@ -34,11 +33,8 @@ use Excent\BePaidLaravel\Refund;
 
 class PaymentService 
 {
-    /** @var Refund */
-    private $refund;
-
-    public function __construct(Refund $refund) {
-        $this->refund = $refund;
+    public function __construct(private Refund $refund)
+    {
     }
 
     public function refund()
@@ -70,24 +66,24 @@ which gives you access to original object.
 This is in case if package features are not enough to reach goal.
 You can check original [package](https://github.com/begateway/begateway-api-php) to see all available methods.
 
-| **BeGateway**          | **BePaid Laravel** | **Facade**       | **DTO**                |
-|------------------------|--------------------|------------------|------------------------|
-| AuthorizationOperation | Authorization      | Authorization    | AuthorizationDto       |
-| CardToken              | CardToken          | CardToken        | CardTokenDto           |
-| PaymentOperation       | Payment            | Payment          | PaymentDto             |
-| GetPaymentToken        | PaymentToken       | PaymentToken     | PaymentTokenDto        |
-| Product                | Product            | Product          | ProductDto             |
-| QueryByPaymentToken    | Query              | Query            | QueryByPaymentTokenDto |
-| QueryByTrackingId      | Query              | Query            | QueryByTrackingIdDto   |
-| QueryByUid             | Query              | Query            | QueryByUidDto          |
-| RefundOperation        | Refund             | Refund           | RefundDto              |
-| CreditOperation        | Credit             | Credit           | CreditDto              |
-| CaptureOperation       | ChildTransaction   | ChildTransaction | CaptureDto             |
-| VoidOperation          | ChildTransaction   | ChildTransaction | VoidDto                |
+| **BeGateway**          | **BePaid Laravel** | **Facade**       | **DTO**                      |
+|------------------------|--------------------|------------------|------------------------------|
+| AuthorizationOperation | Authorization      | Authorization    | AuthorizationDto             |
+| CardToken              | CardToken          | CardToken        | CardTokenDto                 |
+| PaymentOperation       | Payment            | Payment          | PaymentDto                   |
+| GetPaymentToken        | PaymentToken       | PaymentToken     | PaymentTokenDto              |
+| Product                | Product            | Product          | ProductDto                   |
+| QueryByPaymentToken    | StatusQuery        | StatusQuery      | StatusQueryByPaymentTokenDto |
+| QueryByTrackingId      | StatusQuery        | StatusQuery      | StatusQueryByTrackingIdDto   |
+| QueryByUid             | StatusQuery        | StatusQuery      | StatusQueryByUidDto          |
+| RefundOperation        | Refund             | Refund           | RefundDto                    |
+| CreditOperation        | Credit             | Credit           | CreditDto                    |
+| CaptureOperation       | ChildTransaction   | ChildTransaction | CaptureDto                   |
+| VoidOperation          | ChildTransaction   | ChildTransaction | VoidDto                      |
 
-A few words about `Query` and `ChildTransaction` objects. They are also have `$operation` public field,
+A few words about `StatusQuery` and `ChildTransaction` objects. They are also have `$operation` public field,
 but there are nuances. It depends on which DTO you will pass to `fill()` or `submit()` method. So let's say
-you want to query for transaction by uid, in this case you'll create a `new QueryByUidDto([...])`, then `$operation`
+you want to query for transaction by uid, in this case you'll create a `new StatusQueryByUidDto([...])`, then `$operation`
 field becomes instance of `\BeGateway\QueryByUid`.
 
 ### Subscribe to events

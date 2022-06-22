@@ -42,7 +42,7 @@
         "Payment": "Excent\\BePaidLaravel\\Facades\\Payment",
         "PaymentToken": "Excent\\BePaidLaravel\\Facades\\PaymentToken",
         "Product": "Excent\\BePaidLaravel\\Facades\\Product",
-        "Query": "Excent\\BePaidLaravel\\Facades\\Query",
+        "StatusQuery": "Excent\\BePaidLaravel\\Facades\\StatusQuery",
         "Refund": "Excent\\BePaidLaravel\\Facades\\Refund"
       }
     }
