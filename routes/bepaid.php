@@ -1,35 +1,18 @@
 <?php
 
+use Excent\BePaidLaravel\Http\Controllers\BePaidController;
 use Illuminate\Support\Facades\Route;
 
-$config = config('bepaid');
+$config = config('bepaid.urls');
 
-Route::group([
-    'namespace' => 'Excent\BePaidLaravel\Http\Controllers',
-    'prefix' => 'bepaid',
-], function () use ($config) {
-    Route::post($config['urls']['notifications']['path'], [
-        'uses' => 'BePaidController@notification',
-        'as' => $config['urls']['notifications']['name'],
-    ])->middleware(array_unique(array_merge(['bepaid.inject_basic_auth'], $config['middlewares'])));
-    Route::get($config['urls']['cancel']['path'], [
-        'uses' => 'BePaidController@cancel',
-        'as' => $config['urls']['cancel']['name'],
-    ])->middleware($config['middlewares']);
-    Route::get($config['urls']['decline']['path'], [
-        'uses' => 'BePaidController@decline',
-        'as' => $config['urls']['decline']['name'],
-    ])->middleware($config['middlewares']);
-    Route::get($config['urls']['success']['path'], [
-        'uses' => 'BePaidController@success',
-        'as' => $config['urls']['success']['name'],
-    ])->middleware($config['middlewares']);
-    Route::get($config['urls']['fail']['path'], [
-        'uses' => 'BePaidController@fail',
-        'as' => $config['urls']['fail']['name'],
-    ])->middleware($config['middlewares']);
-    Route::get($config['urls']['return']['path'], [
-        'uses' => 'BePaidController@return',
-        'as' => $config['urls']['return']['name'],
-    ])->middleware($config['middlewares']);
+Route::post($config['notifications']['path'], [BePaidController::class, 'notification'])
+    ->middleware(array_unique(array_merge(['bepaid.inject_basic_auth'], config('bepaid.middlewares'))))
+    ->name($config['notifications']['name']);
+
+Route::middleware(config('bepaid.middlewares'))->group(function () use ($config) {
+    Route::get($config['cancel']['path'], [BePaidController::class, 'cancel'])->name($config['cancel']['name']);
+    Route::get($config['decline']['path'], [BePaidController::class, 'decline'])->name($config['decline']['name']);
+    Route::get($config['success']['path'], [BePaidController::class, 'success'])->name($config['success']['name']);
+    Route::get($config['fail']['path'], [BePaidController::class, 'fail'])->name($config['fail']['name']);
+    Route::get($config['return']['path'], [BePaidController::class, 'return',])->name($config['return']['name']);
 });

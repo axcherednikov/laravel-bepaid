@@ -21,6 +21,7 @@ use BeGateway\{
     Webhook
 };
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Excent\BePaidLaravel\{
     Authorization,
@@ -304,6 +305,9 @@ class BePaidServiceProvider extends ServiceProvider
      */
     private function bootRoutes(): void
     {
-        $this->loadRoutesFrom(self::ROUTES_PATH);
+        Route::group([
+            'namespace' => 'Excent\BePaidLaravel\Http\Controllers',
+            'prefix' => 'bepaid',
+        ], fn() => $this->loadRoutesFrom(self::ROUTES_PATH));
     }
 }
