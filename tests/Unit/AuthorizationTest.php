@@ -48,13 +48,10 @@ class AuthorizationTest extends TestCase
     {
         $config = $this->app['config']->get('bepaid');
 
-        /** @var \Illuminate\Routing\UrlGenerator $router */
-        $router = $this->app['url'];
-
         $this->assertEquals($config['test_mode'], $this->authorization->operation->getTestMode());
         $this->assertEquals($config['currency'], $this->authorization->operation->money->getCurrency());
         $this->assertEquals($config['lang'], $this->authorization->operation->getLanguage());
-        $this->assertEquals($router->route($config['urls']['notifications']['name'], [], true), $this->authorization->operation->getNotificationUrl());
+
     }
 
     public function testFill()
@@ -68,6 +65,7 @@ class AuthorizationTest extends TestCase
         $this->assertEquals($this->data['money']['amount'], $result->operation->money->getAmount());
         $this->assertEquals($this->data['additional_data']['receipt'], $result->operation->additional_data->getReceipt());
         $this->assertSameSize($this->data['customer'], (array)$result->operation->customer);
+        $this->assertEquals(route(config('bepaid.urls.notifications.name'), [], true), $this->authorization->operation->getNotificationUrl());
 
         foreach ($result->operation->customer as $key => $value) {
             $this->assertEquals($this->data['customer'][$key], $value);

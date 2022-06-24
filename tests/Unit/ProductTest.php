@@ -45,20 +45,25 @@ class ProductTest extends TestCase
         $this->assertEquals($config['test_mode'], $this->product->operation->getTestMode());
         $this->assertEquals($config['currency'], $this->product->operation->money->getCurrency());
         $this->assertEquals($config['lang'], $this->product->operation->getLanguage());
-        $this->assertEquals($router->route($config['urls']['notifications']['name'], [], true), $this->product->operation->getNotificationUrl());
-        $this->assertEquals($router->route($config['urls']['success']['name'], [], true), $this->product->operation->getSuccessUrl());
-        $this->assertEquals($router->route($config['urls']['fail']['name'], [], true), $this->product->operation->getFailUrl());
-        $this->assertEquals($router->route($config['urls']['return']['name'], [], true), $this->product->operation->getReturnUrl());
         $this->assertNotNull($this->product->operation->getExpiryDate());
     }
 
     public function testFill()
     {
+        $config = $this->app['config']->get('bepaid');
+
+        /** @var \Illuminate\Routing\UrlGenerator $router */
+        $router = $this->app['url'];
+
         $productDto = new ProductDto($this->data);
 
         /** @var Product $result */
         $result = $this->product->fill($productDto);
 
+        $this->assertEquals($router->route($config['urls']['notifications']['name'], [], true), $this->product->operation->getNotificationUrl());
+        $this->assertEquals($router->route($config['urls']['success']['name'], [], true), $this->product->operation->getSuccessUrl());
+        $this->assertEquals($router->route($config['urls']['fail']['name'], [], true), $this->product->operation->getFailUrl());
+        $this->assertEquals($router->route($config['urls']['return']['name'], [], true), $this->product->operation->getReturnUrl());
         $this->assertEquals($this->data['name'], $result->operation->getName());
         $this->assertEquals($this->data['description'], $result->operation->getDescription());
         $this->assertEquals($this->data['quantity'], $result->operation->getQuantity());

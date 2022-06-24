@@ -14,11 +14,12 @@ class Payment extends GatewayAbstract
 {
     public function __construct(public PaymentOperation $operation)
     {
-        $operation->setNotificationUrl(route(config('bepaid.urls.notifications.name'), [], true));
     }
 
     public function fill(FillingDTOContract $data, $object = null): IGateway
     {
+        $this->operation->setNotificationUrl(route(config('bepaid.urls.notifications.name'), [], true));
+
         if ($data instanceof PaymentDto && empty($data->tracking_id)) {
             $data->tracking_id = Str::uuid()->toString();
         }

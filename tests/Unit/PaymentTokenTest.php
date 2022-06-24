@@ -66,12 +66,27 @@ class PaymentTokenTest extends TestCase
     {
         $config = $this->app['config']->get('bepaid');
 
-        /** @var \Illuminate\Routing\UrlGenerator $router */
-        $router = $this->app['url'];
-
         $this->assertEquals($config['test_mode'], $this->paymentToken->operation->getTestMode());
         $this->assertEquals($config['currency'], $this->paymentToken->operation->money->getCurrency());
         $this->assertEquals($config['lang'], $this->paymentToken->operation->getLanguage());
+        $this->assertNotNull($this->paymentToken->operation->getExpiryDate());
+        $this->assertEquals($config['attempts'], $this->paymentToken->operation->getAttempts());
+        $this->assertEquals($config['visible'], $this->paymentToken->operation->getVisibleFields());
+        $this->assertEquals($config['read_only'], $this->paymentToken->operation->getReadonlyFields());
+    }
+
+    public function testFill()
+    {
+        $config = $this->app['config']->get('bepaid');
+
+        /** @var \Illuminate\Routing\UrlGenerator $router */
+        $router = $this->app['url'];
+
+        $paymentTokenDto = new PaymentTokenDto($this->data);
+
+        /** @var PaymentToken $result */
+        $result = $this->paymentToken->fill($paymentTokenDto);
+
         $this->assertEquals($router->route($config['urls']['notifications']['name'], [], true),
             $this->paymentToken->operation->getNotificationUrl());
         $this->assertEquals($router->route($config['urls']['success']['name'], [], true),
@@ -82,19 +97,6 @@ class PaymentTokenTest extends TestCase
             $this->paymentToken->operation->getDeclineUrl());
         $this->assertEquals($router->route($config['urls']['cancel']['name'], [], true),
             $this->paymentToken->operation->getCancelUrl());
-        $this->assertNotNull($this->paymentToken->operation->getExpiryDate());
-        $this->assertEquals($config['attempts'], $this->paymentToken->operation->getAttempts());
-        $this->assertEquals($config['visible'], $this->paymentToken->operation->getVisibleFields());
-        $this->assertEquals($config['read_only'], $this->paymentToken->operation->getReadonlyFields());
-    }
-
-    public function testFill()
-    {
-        $paymentTokenDto = new PaymentTokenDto($this->data);
-
-        /** @var PaymentToken $result */
-        $result = $this->paymentToken->fill($paymentTokenDto);
-
         $this->assertEquals($this->data['description'], $result->operation->getDescription());
         $this->assertEquals($this->data['tracking_id'], $result->operation->getTrackingId());
         $this->assertEquals($this->data['transaction_type'], $result->operation->getTransactionType());

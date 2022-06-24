@@ -8,7 +8,6 @@ use BeGateway\GatewayTransport;
 use Excent\BePaidLaravel\Dtos\PaymentDto;
 use Excent\BePaidLaravel\Payment;
 use Excent\BePaidLaravel\Tests\TestCase;
-use Illuminate\Routing\UrlGenerator;
 use Mockery;
 
 class PaymentTest extends TestCase
@@ -50,13 +49,9 @@ class PaymentTest extends TestCase
     {
         $config = $this->app['config']->get('bepaid');
 
-        /** @var UrlGenerator $router */
-        $router = $this->app['url'];
-
         $this->assertEquals($config['test_mode'], $this->payment->operation->getTestMode());
         $this->assertEquals($config['currency'], $this->payment->operation->money->getCurrency());
         $this->assertEquals($config['lang'], $this->payment->operation->getLanguage());
-        $this->assertEquals($router->route($config['urls']['notifications']['name'], [], true), $this->payment->operation->getNotificationUrl());
     }
 
     public function testFill()
@@ -69,7 +64,8 @@ class PaymentTest extends TestCase
         $this->assertEquals($this->data['tracking_id'], $result->operation->getTrackingId());
         $this->assertEquals($this->data['money']['amount'], $result->operation->money->getAmount());
         $this->assertEquals($this->data['additional_data']['receipt'], $result->operation->additional_data->getReceipt());
-        $this->assertSameSize($this->data['customer'], (array)$result->operation->customer);
+        $this->assertSameSize($this->data['customer'], (array) $result->operation->customer);
+        $this->assertEquals(route(config('bepaid.urls.notifications.name'), [], true), $this->payment->operation->getNotificationUrl());
 
         foreach ($result->operation->customer as $key => $value) {
             $this->assertEquals($this->data['customer'][$key], $value);
