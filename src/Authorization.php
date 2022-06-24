@@ -14,6 +14,10 @@ class Authorization extends GatewayAbstract
 {
     public function __construct(public AuthorizationOperation $operation)
     {
+        $config = config('bepaid.urls');
+
+        $operation->setNotificationUrl(route($config['notifications']['name'], [], true));
+        $operation->setReturnUrl(route($config['return']['name'], [], true));
     }
 
     public function fill(FillingDTOContract $data, $object = null): IGateway

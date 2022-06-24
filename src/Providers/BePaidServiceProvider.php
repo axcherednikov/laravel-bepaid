@@ -87,11 +87,6 @@ class BePaidServiceProvider extends ServiceProvider
             $operation->setTestMode($config['test_mode']);
             $operation->money->setCurrency($this->getCurrency($config));
             $operation->setLanguage($this->getLanguage($config));
-            $operation->setNotificationUrl(route($config['urls']['notifications']['name'], [], true));
-            $operation->setSuccessUrl(route($config['urls']['success']['name'], [], true));
-            $operation->setDeclineUrl(route($config['urls']['decline']['name'], [], true));
-            $operation->setFailUrl(route($config['urls']['fail']['name'], [], true));
-            $operation->setCancelUrl(route($config['urls']['cancel']['name'], [], true));
             $operation->setAttempts($config['attempts']);
             $operation->setExpiryDate(now()->addMinutes($config['expired_at'])->toIso8601String());
             $operation->setVisible($config['visible']);
@@ -137,7 +132,6 @@ class BePaidServiceProvider extends ServiceProvider
             $operation->setTestMode($config['test_mode']);
             $operation->money->setCurrency($this->getCurrency($config));
             $operation->setLanguage($this->getLanguage($config));
-            $operation->setNotificationUrl(route($config['urls']['notifications']['name'], [], true));
 
             return new Payment($operation);
         });
@@ -155,8 +149,6 @@ class BePaidServiceProvider extends ServiceProvider
             $operation->setTestMode($config['test_mode']);
             $operation->money->setCurrency($this->getCurrency($config));
             $operation->setLanguage($this->getLanguage($config));
-            $operation->setNotificationUrl(route($config['urls']['notifications']['name'], [], true));
-            $operation->setReturnUrl(route($config['urls']['return']['name'], [], true));
 
             return new Authorization($operation);
         });
@@ -188,10 +180,6 @@ class BePaidServiceProvider extends ServiceProvider
             $operation->setTestMode($config['test_mode']);
             $operation->money->setCurrency($this->getCurrency($config));
             $operation->setLanguage($this->getLanguage($config));
-            $operation->setNotificationUrl(route($config['urls']['notifications']['name'], [], true));
-            $operation->setSuccessUrl(route($config['urls']['success']['name'], [], true));
-            $operation->setFailUrl(route($config['urls']['fail']['name'], [], true));
-            $operation->setReturnUrl(route($config['urls']['return']['name'], [], true));
             $operation->setExpiryDate(now()->addMinutes($config['expired_at'])->toIso8601String());
 
             $operation->setVisible($config['visible']);
