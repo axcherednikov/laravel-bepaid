@@ -15,6 +15,7 @@ class AuthorizationDto extends BaseDto implements FillingDTOContract
     public AdditionalDataType $additional_data;
     public string $description;
     public string $tracking_id;
+    public ?bool $duplicate_check;
     public ?bool $test;
     public ?string $language;
 }
